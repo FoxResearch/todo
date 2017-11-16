@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+<HEAD>
+    <title>NOTAS :: HOME</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'todo/css/bootstrap.min.css' %}" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'todo/css/jumbotron.css' %}">
+</HEAD>
+<BODY>
+
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="#">TO-DO</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'todo:index' %}">Home <span class="sr-only">(current)</span></a>
+          </li>
+
+          {% if usuario == 'NONAME' or usuario == '' %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'todo:login' %}">Login</a>
+          {% else %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="menu" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Mi Cuenta</a>
+            <div class="dropdown-menu" aria-labelledby="menu">
+                  <a class="dropdown-item" href="#">Usuario: {{ usuario }}</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{% url 'todo:edituser' %}">Mis Datos</a>
+                  <a class="dropdown-item" href="{% url 'todo:logindel' %}">Cerrar Sesion</a>
+            </div>
+            {% endif %}
+          </li>
+          {% if usuario != 'NONAME' and usuario != '' %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="menu2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Notas</a>
+            <div class="dropdown-menu" aria-labelledby="menu2">
+                  <a class="dropdown-item" href="{% url 'todo:create' %}">Nueva</a>
+                  <a class="dropdown-item" href="{% url 'todo:list' %}">Mis Notas</a>
+            </div>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'todo:register' %}">Nuevo Usuario</a>
+          </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form>
+      </div>
+    </nav>
+
+    <main role="main">
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <div class="container">
+          <h1 class="display-3">Todas las notas</h1>
+          <p>Revise todas las notas publicadas a la fecha. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+          <p><a class="btn btn-secondary btn-lg" href="#" role="button">Sepa más &raquo;</a></p>
+        </div>
+      </div>
+
+      {% if nota_list %}
+      <!-- Example row of columns -->
+      <div class="container">
+          {% for nota in nota_list %}
+          {% cycle '<div class="row">' '' '' %}
+            <div class="col-md-4">
+              <h2>{{ nota.titulo }}</h2>
+              <p>{{ nota.texto }}</p>
+              <p><a class="btn btn-secondary" href="#" role="button">{{ nota.usuario.nombreusuario }} &raquo;</a></p>
+              <p>{{ nota.creado }}</p>
+            </div>
+          {% cycle '' '' '</div>' %}
+          {% endfor %}
+        </div>
+      </div>
+
+      {% else %}
+      <p>No existen notas disponibles</p>
+      {% endif %}
+
+    </main>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'todo/js/jquery-3.2.1.slim.min.js' %}" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="{% static 'todo/js/popper.min.js' %}" ></script>
+    <script src="{% static 'todo/js/bootstrap.min.js' %}" ></script>
+
+</BODY>
+</HTML>
